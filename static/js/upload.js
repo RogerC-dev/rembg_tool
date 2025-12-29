@@ -115,44 +115,12 @@ $(document).ready(function () {
             });
 
             $(".download-background-removed-image").css("visibility", "hidden");
-            detectImageObjects(file);
             removeImageBackground(file);
         } else {
             alert("請上傳有效的圖片文件（JPEG、PNG 或 WebP）。");
         }
     }
 
-    function detectImageObjects(imageFile) {
-        var form = new FormData();
-        form.append("file", imageFile, URL.createObjectURL(imageFile));
-
-        var settings = {
-            "url": "/detect",
-            "method": "POST",
-            "timeout": 0,
-            "processData": false,
-            "mimeType": "multipart/form-data",
-            "contentType": false,
-            "data": form,
-            "xhrFields": {
-                "responseType": "application/json",
-            },
-        };
-
-        $.ajax(settings).done(
-            function (response) {
-                const emojiNames = [];
-                response = JSON.parse(response);
-                response.forEach((object) => {
-                    emojiNames.push(object.name);
-                })
-                fireEmojis(...emojiNames);
-            },
-        ).fail(function (jqXHR, textStatus, errorThrown) {
-            alert("請求失敗，請稍後再試。");
-        }).always(function () {
-        });
-    }
 
     function removeImageBackground(imageFile) {
         const ic = ImageCompares.find((ic) =>
@@ -247,52 +215,3 @@ function resizeContainer(width, height) {
     }
 }
 
-function fireEmojis(...emojiNames) {
-    const emojis = [];
-    emojiNames.forEach(name => {
-        if (OBJECT_EMOJIS.has(name)) {
-            emojis.push(OBJECT_EMOJIS.get(name));
-        }
-    })
-
-    console.log(`Firing emoji: ${emojis}`);
-    
-    for (let i = 1; i <= 10; i++) {
-        emojis.forEach((emoji, index) => {
-            
-            const span = document.createElement("span");
-            span.textContent = emoji;
-            span.style.position = "fixed";
-            span.style.left = `${Math.random() * 80 + 10}%`;
-            span.style.bottom = "5px";
-            span.style.fontSize = `${Math.random() * 20 + 20}px`;
-            span.style.zIndex = "9999";
-            
-            span.style.opacity = "1";
-            
-            setTimeout(() => {
-                document.body.appendChild(span);
-
-                const height = -300 - Math.random() * 200; // 最高點高度（負值表示向上）
-                const jitter = Math.random() * 100 - 50; // 水平方向隨機偏移
-                const rotation = Math.random() * 720 - 360; // 隨機旋轉
-                const duration = 1.5 + Math.random() * 1.0; // 1.5-2.5秒動畫
-                
-                span.style.transition = `transform ${duration}s ease-out, opacity ${duration * 0.8}s ease-in`;
-                
-                requestAnimationFrame(() => {
-                    span.style.transform = `translateX(${jitter}px) translateY(${height}px) rotate(${rotation}deg)`;
-                });
-                
-                setTimeout(() => {
-                    span.style.opacity = "0";
-                }, duration * 500);
-                
-                setTimeout(() => {
-                    span.remove();
-                }, duration * 1000);
-                
-            }, 50 + 100 * index * Math.sqrt(i));
-        });
-    }
-}
