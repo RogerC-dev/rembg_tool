@@ -135,6 +135,17 @@ $(document).ready(function () {
         var form = new FormData();
         form.append("file", imageFile, URL.createObjectURL(imageFile));
 
+        // Get removal mode settings
+        const mode = document.querySelector('input[name="removalMode"]:checked')?.value || 'ai';
+        form.append("mode", mode);
+
+        if (mode === 'color') {
+            const color = document.getElementById('bgColor')?.value || '#00FF00';
+            const tolerance = document.getElementById('tolerance')?.value || '30';
+            form.append("color", color);
+            form.append("tolerance", tolerance);
+        }
+
         var settings = {
             "url": "/removebg",
             "method": "POST",

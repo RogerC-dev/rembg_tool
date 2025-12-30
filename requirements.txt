@@ -1,2 +1,4 @@
 rembg[cpu]
 flask
+pillow
+numpy

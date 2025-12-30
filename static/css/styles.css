@@ -307,3 +307,38 @@ h1 {
     }
 }
 
+/* Mode selection styles */
+.mode-selection {
+    width: 100%;
+    padding: 10px;
+    background: #fff;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+}
+
+.mode-selection .form-label {
+    margin-bottom: 8px;
+    display: block;
+}
+
+.color-options {
+    width: 100%;
+    padding: 15px;
+    background: #fff;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+}
+
+.color-options .form-control-color {
+    width: 50px;
+    height: 35px;
+    padding: 2px;
+    cursor: pointer;
+}
+
+#colorHex {
+    font-family: monospace;
+    font-weight: bold;
+    min-width: 70px;
+}
+
